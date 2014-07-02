@@ -39,13 +39,13 @@ if __name__ == '__main__':
     parser.add_option('-v', '--verbose', help = 'verbose', action = 'store_true')
     parser.add_option('-n', '--processors', help = 'numbers of processors for parallelizing [default: %default]', type = 'int', default = 1)
 
-    parser.add_option('--average-min', help = 'minimum value of qwindowaverage [default: %default]', default = 25)
-    parser.add_option('--average-max', help = 'maximum value of qwindowaverage [default: %default]', default = 75)
-    parser.add_option('--average-step', help = 'step value of qwindowaverage [default: %default]', default = 5)
+    parser.add_option('--average-min', help = 'minimum value of qwindowaverage [default: %default]', type = 'int', default = 25)
+    parser.add_option('--average-max', help = 'maximum value of qwindowaverage [default: %default]', type = 'int', default = 75)
+    parser.add_option('--average-step', help = 'step value of qwindowaverage [default: %default]', type = 'int', default = 5)
 
-    parser.add_option('--size-min', help = 'minimum value of qwindowsize [default: %default]', default = 10)
-    parser.add_option('--size-max', help = 'maximum value of qwindowsize [default: %default]', default = 100)
-    parser.add_option('--size-step', help = 'step value of qwindowsize [default: %default]', default = 10)
+    parser.add_option('--size-min', help = 'minimum value of qwindowsize [default: %default]', type = 'int', default = 10)
+    parser.add_option('--size-max', help = 'maximum value of qwindowsize [default: %default]', type = 'int', default = 100)
+    parser.add_option('--size-step', help = 'step value of qwindowsize [default: %default]', type = 'int', default = 10)
 
     options, args = parser.parse_args()
     if not options.fasta:
