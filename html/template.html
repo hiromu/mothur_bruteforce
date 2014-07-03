@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mothur Parameters</title>
+        <link rel="stylesheet" type="text/css" href="%s/jquery.jqplot.min.css" />
+        <style type="text/css">
+             #tooltip {
+                 font-size: 12px;
+                 color: rgb(15%%, 15%%, 15%%);
+                 padding: 2px;
+                 background-color: rgba(95%%, 95%%, 95%%, 0.8);
+                 position: absolute;
+                 z-index: 99;
+                 display: none;
+             }
+             
+             table {
+                 font-size: 12px;
+                 border: 1px solid #cdcdcd;
+                 border-collapse: collapse;
+                 width: 100%%;
+             }
+             td, th {
+                 border: 1px solid #cdcdcd;
+                 padding: 1px 4px;
+             }
+        </style>
+        <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="%s/excanvas.js"></script><![endif]-->
+        <script language="javascript" type="text/javascript" src="%s/jquery.min.js"></script>
+        <script language="javascript" type="text/javascript" src="%s/jquery.jqplot.min.js"></script>
+        <script language="javascript" type="text/javascript" src="%s/plugins/jqplot.bubbleRenderer.min.js"></script>
+        <script language="javascript" type="text/javascript">
+            var mean = %s;
+            var median = %s;
+            var minimum = %s;
+            var maximum = %s;
+
+            function plot(id, table_id, title, data) {
+                var plot = $.jqplot(id, data, {
+                    title: title,
+                    seriesDefaults: {
+                        renderer: $.jqplot.BubbleRenderer,
+                        rendererOptions: {
+                            bubbleAlpha: 0.6,
+                            highlightAlpha: 0.8,
+                            showLabels: false
+                        },
+                        shadow: true,
+                        shadowAlpha: 0.05
+                    }
+                });
+
+                $.each(data[0], function(index, value) {
+                    $('#' + table_id).append('<tr><td>' + value.join('</td><td>') + '</td></tr>');
+                });
+
+                $('#' + id).bind('jqplotDataHighlight', function(event, seriesIndex, pointIndex, data, radius) {
+                    var chart_left = $('#' + id).offset().left, chart_top = $('#' + id).offset().top;
+                    var x = plot.axes.xaxis.u2p(data[0]), y = plot.axes.yaxis.u2p(data[1]);
+                    var color = 'rgb(50%%,50%%,100%%)';
+
+                    $('#tooltip').css({
+                        left: chart_left + x + radius + 5,
+                        top: chart_top + y
+                    });
+                    $('#tooltip').html('<span>' + data[3] + '</span><br />' + 'ambigs: '+ data[0] + '<br />' + 'polymer: ' + data[1] + '<br />' + 'num seq: ' + data[2]);
+                    $('#tooltip').show();
+
+                    $('#' + table_id + ' tr').css('background-color', '#ffffff');
+                    $('#' + table_id + ' tr').eq(pointIndex + 1).css('background-color', color);
+                });
+
+                $('#' + id).bind('jqplotDataUnhighlight', function(event, seriesIndex, pointIndex, data) {
+                    $('#tooltip').empty();
+                    $('#tooltip').hide();
+                    $('#' + table_id + ' tr').css('background-color', '#ffffff');
+                });
+            }
+
+            $(document).ready(function() {
+                plot('mean', 'tmean', 'Mean', [mean]);
+                plot('median', 'tmedian', 'Median', [median]);
+                plot('minimum', 'tminimum', 'Minimum', [minimum]);
+                plot('maximum', 'tmaximum', 'Maximum', [maximum]);
+            });
+        </script>
+    </head>
+    <body>
+        <div id="tooltip"></div>
+        <div id="mean"></div>
+        <table id="tmean">
+            <tr>
+                <th>Ambigious bases</th>
+                <th>Polymers</th>
+                <th>Number of sequences</th>
+                <th>Parameter</th>
+            </tr>
+        </table>
+        <div id="median"></div>
+        <table id="tmedian">
+            <tr>
+                <th>Ambigious bases</th>
+                <th>Polymers</th>
+                <th>Number of sequences</th>
+                <th>Parameter</th>
+            </tr>
+        </table>
+        <div id="minimum"></div>
+        <table id="tminimum">
+            <tr>
+                <th>Ambigious bases</th>
+                <th>Polymers</th>
+                <th>Number of sequences</th>
+                <th>Parameter</th>
+            </tr>
+        </table>
+        <div id="maximum"></div>
+        <table id="tmaximum">
+            <tr>
+                <th>Ambigious bases</th>
+                <th>Polymers</th>
+                <th>Number of sequences</th>
+                <th>Parameter</th>
+            </tr>
+        </table>
+    </body>
+</html>
